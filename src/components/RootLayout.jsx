@@ -1,19 +1,11 @@
-import { Outlet } from 'react-router-dom'
-import MainNavigation from './MainNavigation'
-import Sidebar from './Sidebar'
-
+import { Outlet } from 'react-router-dom';
+import MainNavigation from './Header/MainNavigation';
 
 export default function RootLayout() {
   return (
-    <div className='flex h-screen'>
-      <Sidebar className='h-full' />
-      <div className='flex-1 flex flex-col'>
-        <MainNavigation />
-        <div className='flex-1 p-4 overflow-auto'>
-          <Outlet />
-        </div>
-      </div>
+    <div className='bg-zinc-100 min-h-[100vb] pb-10 pt-5'>
+      <MainNavigation />
+      <Outlet />
     </div>
   );
 }
-
