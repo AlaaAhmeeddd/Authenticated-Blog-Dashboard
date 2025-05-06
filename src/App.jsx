@@ -11,6 +11,7 @@ import store from './store';
 import ProtectedRoute from './components/ProtectedRoute';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './utils/http';
+import NotFound from './components/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
         element: <ProtectedRoute>
           <Dashboard />
         </ProtectedRoute>,
+      },
+      {
+        path: '*',
+        element: <NotFound />
       }
     ]
   }
@@ -54,4 +59,3 @@ function App() {
 }
 
 export default App;
-

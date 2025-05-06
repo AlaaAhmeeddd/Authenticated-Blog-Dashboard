@@ -9,6 +9,7 @@ import {
   doc,
   deleteDoc,
   updateDoc,
+  orderBy,
 } from "firebase/firestore";
 
 export const queryClient = new QueryClient();
@@ -46,19 +47,23 @@ export async function addPost(post) {
   }
 }
 
+
 export async function getPosts() {
   const postsCollection = collection(fireStore, "Posts");
+  const postsQuery = query(postsCollection, orderBy('date'));
+
   try {
-    const response = await getDocs(postsCollection);
+    const response = await getDocs(postsQuery);
     const allPosts = response.docs.map((doc) => ({
       ...doc.data(),
       id: doc.id,
     }));
     return allPosts;
   } catch (error) {
-    console.error("Error adding post:", error);
+    console.error("Error fetching posts:", error);
   }
 }
+
 
 export async function getPersonalPosts(email) {
   const postsCollection = collection(fireStore, "Posts");

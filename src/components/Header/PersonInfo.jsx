@@ -36,7 +36,7 @@ export default function PersonInfo() {
 
   return (
     <div className='flex items-center gap-x-8 pt-10 pb-4'>
-      <IoPersonCircle className='text-8xl text-[#7B91B0]' />
+      <img src={matchedUser?.imageUrl} className='w-[100px] h-[100px] rounded-full' />
       <div className="flex flex-col gap-1">
         <p className='font-bold text-2xl'>Welcome {matchedUser && matchedUser.userName}!</p>
         <p>Email: {matchedUser && matchedUser.email}</p>

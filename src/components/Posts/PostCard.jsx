@@ -6,44 +6,49 @@ import Modal from '../Modal';
 
 export default function PostCard({ post, isDashboard }) {
   const queryClient = useQueryClient();
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const { mutate } = useMutation({
     mutationFn: deletePost,
     mutationKey: ['posts'],
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts'])
+      queryClient.invalidateQueries(['posts']);
     },
   });
-  
+
   function handleDelete(id) {
     mutate(id);
   }
 
   const handleEdit = () => {
-    setShowModal(true)
-  }
+    setShowModal(true);
+  };
 
   return (
-    <div className='bg-white rounded-xl p-5'>
+    <div className='bg-white rounded-xl overflow-hidden relative h-full flex flex-col justify-between'>
       {showModal && <Modal post={post} setShowModal={setShowModal} />}
-      <div className="flex justify-between items-center">
-        <h1 className='text-xl font-semibold mb-1'>{post.headline}</h1>
+      <img src={post.imageUrl} className='w-full h-[220px]' />
+      <div className='p-5 relative flex-grow'>
+        <div className="flex justify-between items-center">
+          <h1 className='text-xl font-semibold mb-1'>{post.headline}</h1>
+          {isDashboard && (
+            <IoTrashSharp
+              onClick={() => handleDelete(post.id)}
+              className="text-red-500 hover:text-red-700 duration-300 cursor-pointer text-xl"
+            />
+          )}
+        </div>
+        <p>{post.description}</p>
+      </div>
+      <div className='relative bottom-0 p-5 mt-auto'>
+        <p className="text-sm">
+          Published at: <span className='text-gray-500'>{post.date}</span>
+        </p>
         {isDashboard && (
-          <IoTrashSharp
-            onClick={() => handleDelete(post.id)}
-            className="text-red-500 hover:text-red-700 duration-300 cursor-pointer text-xl"
-          />
+          <button className='cursor-pointer w-full p-1 rounded-lg mt-4 font-semibold bg-zinc-300' onClick={handleEdit}>
+            Edit
+          </button>
         )}
       </div>
-      <p>{post.description}</p>
-      <p className="mt-5 text-sm">
-        Published at: <span className='text-gray-500'>{post.date}</span>
-      </p>
-      {isDashboard && (
-        <button className='cursor-pointer w-full p-1 rounded-lg mt-4 font-semibold bg-zinc-300' onClick={handleEdit}>
-          Edit
-        </button>
-      )}
     </div>
   );
 }

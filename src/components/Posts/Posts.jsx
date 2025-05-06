@@ -1,20 +1,29 @@
-import React from 'react'
-import Container from '../Container'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import Container from '../Container';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { IoMdAdd } from "react-icons/io";
 import { useQuery } from '@tanstack/react-query';
 import { getPosts } from '../../utils/http';
 import PostCard from './PostCard';
 
-
 export default function Posts() {
-  const { user } = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
 
-  const { data , isError, isLoading } = useQuery({
+  const { data, isError, isLoading } = useQuery({
     queryFn: getPosts,
     queryKey: ['posts']
-  })
+  });
+
+  const totalPages = data ? Math.ceil(data.length / postsPerPage) : 1;
+  const currentPosts = data ? data.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage) : [];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
+
   return (
     <Container>
       <div className='flex items-center justify-between'>
@@ -28,16 +37,29 @@ export default function Posts() {
           )
         }
       </div>
-      {isError && <p className='text-red-500 font-semibold text-center text-3xl my-5'>Failed to get all posts! try again later.</p> }
-      {isLoading && <p className='text-green-500 font-semibold text-center text-3xl my-5'>Loading...</p> }
+      {isError && <p className='text-red-500 font-semibold text-center text-3xl my-5'>Failed to get all posts! try again later.</p>}
+      {isLoading && <p className='text-green-500 font-semibold text-center text-3xl my-5'>Loading...</p>}
       <div className='grid md:grid-cols-3 grid-cols-1 gap-4 py-10'>
         {
-          data?.length === 0 ? <p className='text-green-500 font-semibold text-center text-xl'>There is no available posts.</p>
-          : data?.map((post) => 
-            <PostCard key={post.title} post={post} />
+          currentPosts.length === 0 ? <p className='text-green-500 font-semibold text-center text-xl'>There are no available posts.</p>
+          : currentPosts.map((post) => 
+            <PostCard key={post.id} post={post} />
           )
         }
       </div>
+      <div className='flex justify-center mt-5'>
+        {
+          Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => setCurrentPage(index + 1)}
+              className={`px-4 py-2 mx-1 rounded-full ${currentPage === index + 1 ? 'bg-blue-500 cursor-pointer text-white' : 'cursor-pointer bg-gray-200'}`}
+            >
+              {index + 1}
+            </button>
+          ))
+        }
+      </div>
     </Container>
-  )
+  );
 }

@@ -13,12 +13,14 @@ export default function NewPost() {
   const { user } = useSelector((state) => state.auth);
   const [postInfo, setPostInfo] = useState({
     headline: "",
-    description: ""
+    description: "",
+    imageUrl: ""
   });
   const [errors, setErrors] = useState({
     headline: "",
     description: "",
-    isAuth: ""
+    isAuth: "",
+    imageUrl: ""
   });
 
   const { mutate, isLoading, isError, error } = useMutation({
@@ -32,6 +34,7 @@ export default function NewPost() {
 
   const handlePostInfo = (e) => {
     const { name, value } = e.target;
+    console.log(name)
     setPostInfo({
       ...postInfo,
       [name]: value
@@ -46,6 +49,9 @@ export default function NewPost() {
       case 'description':
         newErrors.description = value.trim() === "" ? "Description is required" : "";
         break;
+      case 'imageUrl':
+        newErrors.imageUrl = value.trim() === "" ? "Image is required" : "";
+        break;
       default:
         break;
     }
@@ -55,25 +61,29 @@ export default function NewPost() {
 
   const handlePublish = (e) => {
     e.preventDefault();
-  
+
     let newErrors = { ...errors };
-  
+
     if (!user?.email) {
       newErrors.isAuth = "You can't create post without login!!";
     } else {
       newErrors.isAuth = "";
     }
-  
+
     if (!postInfo.headline) {
       newErrors.headline = "The headline is required!!";
     }
-  
+
     if (!postInfo.description) {
       newErrors.description = "The description is required!!";
     }
-  
+
+    if (!postInfo.imageUrl) {
+      newErrors.imageUrl = "The Image is required!!";
+    }
+
     setErrors(newErrors);
-    if (!newErrors.isAuth && !newErrors.headline && !newErrors.description) {
+    if (!newErrors.isAuth && !newErrors.headline && !newErrors.description && !newErrors.imageUrl) {
       const date = new Date();
       const formattedDate = date.toLocaleString('en-US', {
         year: 'numeric',
@@ -84,7 +94,6 @@ export default function NewPost() {
         second: 'numeric',
         hour12: true
       });
-  
       const post = {
         ...postInfo,
         userEmail: user?.email,
@@ -96,6 +105,7 @@ export default function NewPost() {
     }
   };
   
+  console.log(postInfo)
 
   return (
     <Container>
@@ -107,7 +117,7 @@ export default function NewPost() {
               {errors.isAuth}
             </p>
             <Link to={'/login'} className='flex items-center gap-2 font-semibold group'>
-              <span className='text-lg'>Click here to Login</span> 
+              <span className='text-lg'>Click here to Login</span>
               <FaArrowRightLong className='relative group-hover:left-1.5 left-0 duration-300' />
             </Link>
           </div>
@@ -122,15 +132,24 @@ export default function NewPost() {
         {errors.headline && !errors.isAuth && <p className='text-red-500 font-semibold my-2'>{errors.headline}</p>}
         <div className='flex flex-col gap-3'>
           <label htmlFor='description' className='text-slate-600 font-semibold'>Description</label>
-          <textarea 
-            name='description' 
-            className='border rounded-lg border-slate-300 p-2' 
-            rows="6" 
-            value={postInfo.description} 
+          <textarea
+            name='description'
+            className='border rounded-lg border-slate-300 p-2'
+            rows="6"
+            value={postInfo.description}
             onChange={handlePostInfo}
           />
         </div>
         {errors.description && !errors.isAuth && <p className='text-red-500 font-semibold my-2'>{errors.description}</p>}
+        <Input
+          labelTitle={'Image URL'}
+          inputName={'imageUrl'}
+          inputType='text'
+          inputValue={postInfo.imageUrl}
+          onChange={handlePostInfo}
+        />
+        {errors.imageUrl && !errors.isAuth && <p className='text-red-500 font-semibold my-2'>{errors.imageUrl}</p>}
+
         <button
           className='text-white bg-[#5D5FEF] rounded-full w-full mt-8 px-3 py-2 cursor-pointer hover:bg-[#5556C3] duration-300'
           onClick={handlePublish}

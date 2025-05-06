@@ -8,6 +8,7 @@ export default function Modal({ post, setShowModal }) {
     const [errors, setErrors] = useState({
         headline: "",
         description: "",
+        imageUrl: ""
     });
 
     const handlePostInfo = (e) => {
@@ -24,6 +25,9 @@ export default function Modal({ post, setShowModal }) {
             case 'description':
                 newErrors.description = value.trim() === "" ? "Description is required" : "";
                 break;
+            case 'imageUrl':
+                newErrors.imageUrl = value.trim() === "" ? "Image is required" : "";
+                break;
             default:
                 break;
         }
@@ -39,8 +43,11 @@ export default function Modal({ post, setShowModal }) {
         if (!postInfo.description) {
             newErrors.description = "The description is required!!";
         }
+        if (!postInfo.imageUrl) {
+            newErrors.imageUrl = "The Image is required!!";
+        }
         setErrors(newErrors);
-        if (!newErrors.headline && !newErrors.description) {
+        if (!newErrors.headline && !newErrors.description && !newErrors.imageUrl) {
             mutate({ postId: postInfo.id, updatedData: postInfo });
         }
     };
@@ -56,8 +63,8 @@ export default function Modal({ post, setShowModal }) {
 
     return (
         <div>
-            <div className="w-full h-full top-0 bottom-0 left-0 right-0 fixed bg-black/50" />
-            <div className="md:w-[50%] w-full bg-white rounded-xl fixed top-[50%] -translate-x-[50%] left-[50%] -translate-y-[50%] p-3">
+            <div className="z-[1000] w-full h-full top-0 bottom-0 left-0 right-0 fixed bg-black/50" />
+            <div className="z-[1000] md:w-[50%] w-full bg-white rounded-xl fixed top-[50%] -translate-x-[50%] left-[50%] -translate-y-[50%] p-3">
                 <span className="absolute right-6 text-2xl text-red-500 font-bold cursor-pointer" onClick={() => setShowModal(false)}>
                     X
                 </span>
@@ -81,6 +88,14 @@ export default function Modal({ post, setShowModal }) {
                         />
                     </div>
                     {errors.description && <p className='text-red-500 font-semibold my-2'>{errors.description}</p>}
+                    <Input
+                        labelTitle={'Your image'}
+                        inputName={'imageUrl'}
+                        inputValue={postInfo.imageUrl}
+                        inputType='text'
+                        onChange={handlePostInfo}
+                    />
+                    {errors.imageUrl && <p className='text-red-500 font-semibold my-2'>{errors.imageUrl}</p>}
                     <button
                         className='text-white bg-[#5D5FEF] rounded-full w-full mt-8 px-3 py-2 cursor-pointer hover:bg-[#5556C3] duration-300'
                         onClick={handleEdit}

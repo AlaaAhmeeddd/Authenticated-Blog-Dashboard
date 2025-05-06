@@ -17,7 +17,8 @@ export default function Signup() {
     userName: "",
     location: "",
     age: null,
-    confirmedPassword: ""
+    confirmedPassword: "",
+    imageUrl: ""
   });
   const [inputErrors, setInputErrors] = useState({
     email: "",
@@ -25,14 +26,15 @@ export default function Signup() {
     userName: "",
     location: "",
     age: "",
-    passwordConfirmed: ""
+    passwordConfirmed: "",
+    imageUrl: ""
   });
   const dispatch = useDispatch();
 
   const { mutate } = useMutation({
     mutationFn: addNewUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['users']})
+      queryClient.invalidateQueries({ queryKey: ['users'] })
     }
   })
 
@@ -63,6 +65,9 @@ export default function Signup() {
         errors.passwordConfirmed = value.trim() === "" ? "Password is required" : "";
         errors.passwordConfirmed = value !== formData.password ? "Passwords do not match" : "";
         break;
+      case 'imageUrl':
+        errors.imageUrl = value.trim() === "" ? "Image is required" : "";
+        break;
       default:
         break;
     }
@@ -91,6 +96,9 @@ export default function Signup() {
     if (formData.location.trim() === "") {
       errors.location = "Location is required";
     }
+    if (formData.imageUrl.trim() === "") {
+      errors.imageUrl = "Image is required";
+    }
     if (formData.age < 16) {
       errors.age = "Age must be a equal or greater than 16";
     }
@@ -108,7 +116,7 @@ export default function Signup() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       dispatch(signupSuccess(userCredential.user));
-      mutate( formData )
+      mutate(formData)
       navigate('/dashboard')
     } catch (err) {
       dispatch(signupFailure(err.message));
@@ -169,7 +177,14 @@ export default function Signup() {
             onChange={handleFormData}
           />
           {inputErrors.age && <p className='text-red-500'>{inputErrors.age}</p>}
-
+          <Input
+            labelTitle={'Your image'}
+            inputName={'imageUrl'}
+            inputValue={formData.imageUrl}
+            inputType='text'
+            onChange={handleFormData}
+          />
+          {inputErrors.imageUrl && <p className='text-red-500'>{inputErrors.imageUrl}</p>}
           {error && <p className='text-red-500'>{error}</p>}
           <button
             className='text-white bg-[#5D5FEF] rounded-full w-full mt-8 px-3 py-2 cursor-pointer hover:bg-[#5556C3] duration-300'
