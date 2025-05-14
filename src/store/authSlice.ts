@@ -1,12 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const authSlice = createSlice({
-  name: "authentication",
-  initialState: {
+interface AuthState {
+  user: any; 
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: AuthState = {
     user: null,
     loading: false,
     error: null,
-  },
+}
+
+const authSlice = createSlice({
+  name: "authentication",
+  initialState,
   reducers: {
     signupStart: (state) => {
       state.loading = true;
@@ -36,7 +44,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.user = null;
-      state.loading = null;
+      state.loading = false;
       state.error = null;
     },
   },

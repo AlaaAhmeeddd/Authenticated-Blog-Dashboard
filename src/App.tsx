@@ -1,17 +1,16 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootLayout from './components/RootLayout';
-import Home from './components/Home';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Posts from './components/Posts/Posts';
-import NewPost from './components/Posts/NewPost';
-import Dashboard from './components/Dashboard';
+import Login from './pages/login';
+import Signup from './pages/signup';
+import Posts from './pages/posts';
+import NewPost from './pages/new-post';
+import Dashboard from './pages/dashboard';
 import { Provider } from 'react-redux';
 import store from './store';
 import ProtectedRoute from './components/ProtectedRoute';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './utils/http';
-import NotFound from './components/NotFound';
+import NotFound from './pages/not-found';
 
 const router = createBrowserRouter([
   {

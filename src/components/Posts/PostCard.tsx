@@ -3,19 +3,25 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { IoTrashSharp } from 'react-icons/io5';
 import { deletePost } from '../../utils/http';
 import Modal from '../Modal';
+import { PostType } from '@/type';
 
-export default function PostCard({ post, isDashboard }) {
+interface CardType {
+  post: PostType;
+  isDashboard: boolean;
+}
+
+export default function PostCard({ post, isDashboard } : CardType) {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const { mutate } = useMutation({
     mutationFn: deletePost,
     mutationKey: ['posts'],
     onSuccess: () => {
-      queryClient.invalidateQueries(['posts']);
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
     },
   });
 
-  function handleDelete(id) {
+  function handleDelete(id: string) {
     mutate(id);
   }
 
@@ -32,7 +38,7 @@ export default function PostCard({ post, isDashboard }) {
           <h1 className='text-xl font-semibold mb-1'>{post.headline}</h1>
           {isDashboard && (
             <IoTrashSharp
-              onClick={() => handleDelete(post.id)}
+              onClick={() => handleDelete(post.id!)}
               className="text-red-500 hover:text-red-700 duration-300 cursor-pointer text-xl"
             />
           )}

@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import { logout } from '../../store/authSlice'
-import PersonInfo from '../Header/PersonInfo'
+import PersonInfo from './PersonInfo'
+import { RootState } from '../../store'; 
 
 export default function MainNavigation() {
-    const { user } = useSelector((state) => state.auth)
+    const { user } = useSelector((state: RootState) => state.auth)
     const dispatch = useDispatch()
-     
+    
     return (
         <div className='rounded-md bg-slate-900 mb-8 text-white container mx-auto py-4 px-8'>
             <div className='flex items-center justify-between flex-1'>
@@ -23,7 +24,7 @@ export default function MainNavigation() {
                     {user ? (
                         <button
                             className='text-white bg-[#5D5FEF] rounded-lg px-3 py-1 cursor-pointer hover:bg-[#5556C3] duration-300'
-                            onClick={() => dispatch(logout())}
+                            onClick={() => {dispatch(logout()); localStorage.removeItem('person')}}
                         >
                             Log out
                         </button>

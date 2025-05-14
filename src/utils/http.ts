@@ -11,6 +11,7 @@ import {
   updateDoc,
   orderBy,
 } from "firebase/firestore";
+import { PostType } from "@/type";
 
 export const queryClient = new QueryClient();
 
@@ -37,7 +38,7 @@ export async function addNewUser(user) {
   }
 }
 
-export async function addPost(post) {
+export async function addPost(post: PostType) {
   const postsCollection = collection(fireStore, "Posts");
   try {
     await addDoc(postsCollection, post);
@@ -47,10 +48,9 @@ export async function addPost(post) {
   }
 }
 
-
 export async function getPosts() {
   const postsCollection = collection(fireStore, "Posts");
-  const postsQuery = query(postsCollection, orderBy('date'));
+  const postsQuery = query(postsCollection, orderBy("date"));
 
   try {
     const response = await getDocs(postsQuery);
@@ -64,8 +64,7 @@ export async function getPosts() {
   }
 }
 
-
-export async function getPersonalPosts(email) {
+export async function getPersonalPosts(email: string) {
   const postsCollection = collection(fireStore, "Posts");
   const q = query(postsCollection, where("userEmail", "==", email));
 
@@ -81,7 +80,7 @@ export async function getPersonalPosts(email) {
   }
 }
 
-export async function deletePost(postId) {
+export async function deletePost(postId: string) {
   try {
     const q = query(collection(fireStore, "Posts"), where("id", "==", postId));
     const querySnapshot = await getDocs(q);
@@ -90,11 +89,15 @@ export async function deletePost(postId) {
       try {
         await deleteDoc(doc(fireStore, "Posts", document.id));
       } catch (error) {
-        throw Error('Error deleting the post', error);
+        if (error instanceof Error) {
+          throw Error("Error deleting the post", error);
+        }
       }
     });
   } catch (error) {
-    throw Error("Cannot find the post", error);
+    if (error instanceof Error) {
+      throw Error("Cannot find the post", error);
+    }
   }
 }
 
@@ -108,7 +111,10 @@ export async function updatePost(postId, updatedData) {
         await updateDoc(doc(fireStore, "Posts", document.id), updatedData);
         console.log(`Document with id ${document.id} successfully updated!`);
       } catch (error) {
-        console.error(`Error updating document with id ${document.id}: `, error);
+        console.error(
+          `Error updating document with id ${document.id}: `,
+          error
+        );
       }
     });
   } catch (error) {

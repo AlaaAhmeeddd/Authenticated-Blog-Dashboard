@@ -2,8 +2,14 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient, updatePost } from "../utils/http";
 import Input from "./Input";
+import { PostType } from "@/type";
 
-export default function Modal({ post, setShowModal }) {
+interface modalType {
+    post: PostType,
+    setShowModal: (show: boolean) => void;
+}
+
+export default function Modal({ post, setShowModal } : modalType) {
     const [postInfo, setPostInfo] = useState(post);
     const [errors, setErrors] = useState({
         headline: "",
@@ -11,7 +17,7 @@ export default function Modal({ post, setShowModal }) {
         imageUrl: ""
     });
 
-    const handlePostInfo = (e) => {
+    const handlePostInfo = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setPostInfo({
             ...postInfo,
@@ -34,7 +40,7 @@ export default function Modal({ post, setShowModal }) {
         setErrors(newErrors);
     };
 
-    const handleEdit = (e) => {
+    const handleEdit = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         let newErrors = { ...errors };
         if (!postInfo.headline) {
