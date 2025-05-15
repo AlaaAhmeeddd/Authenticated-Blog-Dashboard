@@ -79,6 +79,7 @@ export async function getPersonalPosts(email: string): Promise<PostType[]> {
         description: data.description,
         imageUrl: data.imageUrl,
         date: data.date,
+        userEmail: data.userEmail,
       };
       posts.push(post);
     });
