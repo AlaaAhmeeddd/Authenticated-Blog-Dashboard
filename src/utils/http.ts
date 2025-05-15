@@ -11,7 +11,7 @@ import {
   updateDoc,
   orderBy,
 } from "firebase/firestore";
-import { PostType } from "@/type";
+import { PostType, updatedPostType, UserType } from "@/type";
 
 export const queryClient = new QueryClient();
 
@@ -29,7 +29,7 @@ export async function getAllUsers() {
   }
 }
 
-export async function addNewUser(user) {
+export async function addNewUser(user : UserType) {
   const usersCollection = collection(fireStore, "Users");
   try {
     await addDoc(usersCollection, user);
@@ -64,21 +64,31 @@ export async function getPosts() {
   }
 }
 
-export async function getPersonalPosts(email: string) {
+export async function getPersonalPosts(email: string): Promise<PostType[]> {
   const postsCollection = collection(fireStore, "Posts");
   const q = query(postsCollection, where("userEmail", "==", email));
 
   try {
     const querySnapshot = await getDocs(q);
-    const posts = [];
+    const posts: PostType[] = [];
     querySnapshot.forEach((doc) => {
-      posts.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      const post: PostType = {
+        id: doc.id,
+        headline: data.headline,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        date: data.date,
+      };
+      posts.push(post);
     });
     return posts;
   } catch (error) {
     console.log(error);
+    return [];
   }
 }
+
 
 export async function deletePost(postId: string) {
   try {
@@ -88,6 +98,7 @@ export async function deletePost(postId: string) {
     querySnapshot.forEach(async (document) => {
       try {
         await deleteDoc(doc(fireStore, "Posts", document.id));
+        console.log("Post deleted successfully");
       } catch (error) {
         if (error instanceof Error) {
           throw Error("Error deleting the post", error);
@@ -101,15 +112,15 @@ export async function deletePost(postId: string) {
   }
 }
 
-export async function updatePost(postId, updatedData) {
+export async function updatePost(postId: string, updatedData: updatedPostType) {
   try {
     const q = query(collection(fireStore, "Posts"), where("id", "==", postId));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach(async (document) => {
       try {
-        await updateDoc(doc(fireStore, "Posts", document.id), updatedData);
-        console.log(`Document with id ${document.id} successfully updated!`);
+        await updateDoc(doc(fireStore, "Posts", document.id), { ...updatedData });
+        console.log("Post updated successfully");
       } catch (error) {
         console.error(
           `Error updating document with id ${document.id}: `,

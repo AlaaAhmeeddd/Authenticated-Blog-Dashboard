@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { IoTrashSharp } from 'react-icons/io5';
 import { deletePost } from '../../utils/http';
@@ -7,7 +7,7 @@ import { PostType } from '@/type';
 
 interface CardType {
   post: PostType;
-  isDashboard: boolean;
+  isDashboard?: boolean;
 }
 
 export default function PostCard({ post, isDashboard } : CardType) {

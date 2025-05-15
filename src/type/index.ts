@@ -1,7 +1,24 @@
 export interface PostType {
-    id?: string;
     headline: string;
     description: string;
     imageUrl: string;
     date: string;
+    id?: string;
+    userEmail: string
+}
+
+export interface UserType {
+    age: string;
+    userName: string;
+    email: string;
+    password: string;
+    confirmedPassword: string;
+    imageUrl: string;
+    location: string;
+}
+
+export interface updatedPostType { 
+    headline: string;
+    description: string;
+    imageUrl: string;
 }

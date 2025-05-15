@@ -5,7 +5,7 @@ import useNewPost from './useNewPost';
 
 export default function NewPost() {
   
-  const { postInfo, errors, handlePostInfo, handlePublish, isLoading, isError, error } = useNewPost()
+  const { postInfo, errors, handlePostInfo, handlePublish, isPending, isError, error } = useNewPost()
   return (
     <div className='container mx-auto'>
       <form className='bg-white p-6 rounded-xl'>
@@ -52,11 +52,11 @@ export default function NewPost() {
         <button
           className='text-white bg-[#5D5FEF] rounded-full w-full mt-8 px-3 py-2 cursor-pointer hover:bg-[#5556C3] duration-300'
           onClick={handlePublish}
-          disabled={isLoading}
+          disabled={isPending}
         >
-          {isLoading ? "Publishing..." : "Publish"}
+          {isPending ? "Publishing..." : "Publish"}
         </button>
-        {isError && <p className='text-red-500 font-semibold my-2'>Error: {error.message}</p>}
+        {isError && <p className='text-red-500 font-semibold my-2'>Error: {error!.message}</p>}
       </form>
     </div>
   );

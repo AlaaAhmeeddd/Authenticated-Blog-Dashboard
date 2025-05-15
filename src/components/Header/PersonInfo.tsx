@@ -20,14 +20,15 @@ export default function PersonInfo() {
     queryKey: ['users'],
     queryFn: getAllUsers
   });
-  const [matchedUser, setMatchedUser] = useState<UserType | null>(null);
-
+  const [matchedUser, setMatchedUser] = useState<UserType>();
+  console.log(data, 'data')
   useEffect(() => {
     if (user?.email) {
-      const foundUser = data?.find((userData) => userData.email === user.email);
-      setMatchedUser(foundUser || null);
+      const foundUser: UserType = data?.find((userData) => userData.email === user.email);
+      console.log(foundUser, 'foundUser')
+      setMatchedUser(foundUser);
     } else {
-      setMatchedUser(null);
+      setMatchedUser(undefined);
     }
   }, [user?.email, data]);
 

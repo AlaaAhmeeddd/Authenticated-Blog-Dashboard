@@ -11,10 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { addNewUser, queryClient } from "../../utils/http";
 import { RootState } from "@/store";
+import { UserType } from "@/type";
 
 export default function useSignup() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<UserType>({
     email: "",
     password: "",
     userName: "",
@@ -88,7 +89,7 @@ export default function useSignup() {
   };
 
   const handleSubmit = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
 

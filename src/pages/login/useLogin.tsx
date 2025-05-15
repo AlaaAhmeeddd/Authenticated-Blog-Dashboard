@@ -23,7 +23,7 @@ export default function useLogin() {
     })
   } 
   
-  const handleSubmit = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch(loginStart())
     try {

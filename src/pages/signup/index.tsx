@@ -8,7 +8,7 @@ export default function Signup() {
             <div className='md:w-2/3 w-full bg-white rounded-xl p-6'>
                 <h1 className='text-3xl font-bold'>Sign Up</h1>
                 <p className='font-semibold text-[#7B91B0] mt-2'>Please enter your email and password to create your new account.</p>
-                <form className='mt-8' onSubmit={handleSubmit}>
+                <form className='mt-8'>
                     <Input
                         labelTitle={'Username'}
                         inputName={'userName'}
@@ -68,7 +68,7 @@ export default function Signup() {
                     {error && <p className='text-red-500'>{error}</p>}
                     <button
                         className='text-white bg-[#5D5FEF] rounded-full w-full mt-8 px-3 py-2 cursor-pointer hover:bg-[#5556C3] duration-300'
-                        type='submit'
+                        onClick={handleSubmit}
                     >
                         {loading ? 'Loading...' : 'Submit'}
                     </button>

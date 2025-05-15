@@ -40,7 +40,7 @@ export default function Modal({ post, setShowModal } : modalType) {
         setErrors(newErrors);
     };
 
-    const handleEdit = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         let newErrors = { ...errors };
         if (!postInfo.headline) {
@@ -58,11 +58,18 @@ export default function Modal({ post, setShowModal } : modalType) {
         }
     };
 
-    const { mutate, isLoading, isError, error } = useMutation({
-        mutationFn: ({ postId, updatedData }) => updatePost(postId, updatedData),
+    const { mutate, isPending, isError, error } = useMutation<
+        { postId: string | undefined; updatedData: PostType }, 
+        unknown,
+        { postId: string | undefined; updatedData: PostType }
+    >({
+        mutationFn: async ({ postId, updatedData }) => {
+            await updatePost(postId!, updatedData);
+            return { postId, updatedData };
+        },
         mutationKey: ['posts'],
         onSuccess: () => {
-            queryClient.invalidateQueries('posts');
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
             setShowModal(false);
         }
     });
@@ -88,7 +95,7 @@ export default function Modal({ post, setShowModal } : modalType) {
                         <textarea
                             name='description'
                             className='border rounded-lg border-slate-300 p-2'
-                            rows="6"
+                            rows={6}
                             value={postInfo.description}
                             onChange={handlePostInfo}
                         />
@@ -105,11 +112,11 @@ export default function Modal({ post, setShowModal } : modalType) {
                     <button
                         className='text-white bg-[#5D5FEF] rounded-full w-full mt-8 px-3 py-2 cursor-pointer hover:bg-[#5556C3] duration-300'
                         onClick={handleEdit}
-                        disabled={isLoading}
+                        disabled={isPending}
                     >
-                        {isLoading ? "Publishing..." : "Publish"}
+                        {isPending ? "Publishing..." : "Publish"}
                     </button>
-                    {isError && <p className='text-red-500 font-semibold my-2'>Error: {error.message}</p>}
+                    {isError && <p className='text-red-500 font-semibold my-2'>Error: {error instanceof Error ? error.message : "An error occurred"}</p>}
                 </form>
             </div>
         </div>

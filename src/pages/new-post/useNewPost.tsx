@@ -21,7 +21,7 @@ export default function useNewPost() {
     imageUrl: ""
   });
 
-  const { mutate, isLoading, isError, error } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: addPost,
     mutationKey: ['posts'],
     onSuccess: () => {
@@ -57,7 +57,7 @@ export default function useNewPost() {
     setErrors(newErrors);
   };
 
-  const handlePublish = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handlePublish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     let newErrors = { ...errors };
@@ -108,7 +108,7 @@ export default function useNewPost() {
     errors,
     handlePostInfo,
     handlePublish,
-    isLoading,
+    isPending,
     isError,
     error
   }
