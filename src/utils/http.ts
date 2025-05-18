@@ -74,7 +74,7 @@ export async function getPersonalPosts(email: string): Promise<PostType[]> {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       const post: PostType = {
-        id: doc.id,
+        customId: data.customId,
         headline: data.headline,
         description: data.description,
         imageUrl: data.imageUrl,
@@ -93,7 +93,7 @@ export async function getPersonalPosts(email: string): Promise<PostType[]> {
 
 export async function deletePost(postId: string) {
   try {
-    const q = query(collection(fireStore, "Posts"), where("id", "==", postId));
+    const q = query(collection(fireStore, "Posts"), where("customId", "==", postId));
     const querySnapshot = await getDocs(q);
 
     querySnapshot.forEach(async (document) => {
@@ -113,20 +113,21 @@ export async function deletePost(postId: string) {
   }
 }
 
+
 export async function updatePost(postId: string, updatedData: updatedPostType) {
+  console.log(postId, updatedData, 'postId, updatedData');
   try {
-    const q = query(collection(fireStore, "Posts"), where("id", "==", postId));
+    const q = query(collection(fireStore, "Posts"), where("customId", "==", postId));
+    console.log(q, 'query');
     const querySnapshot = await getDocs(q);
+    console.log(querySnapshot, 'querySnapshot');
 
     querySnapshot.forEach(async (document) => {
       try {
-        await updateDoc(doc(fireStore, "Posts", document.id), { ...updatedData });
-        console.log("Post updated successfully");
+        await updateDoc(doc(fireStore, "Posts", document.id), {...updatedData});
+        console.log(`Document with id ${document.id} successfully updated!`);
       } catch (error) {
-        console.error(
-          `Error updating document with id ${document.id}: `,
-          error
-        );
+        console.error(`Error updating document with id ${document.id}: `, error);
       }
     });
   } catch (error) {

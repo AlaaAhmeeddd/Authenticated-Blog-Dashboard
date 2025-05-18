@@ -96,7 +96,7 @@ export default function useNewPost() {
         ...postInfo,
         userEmail: user?.email,
         date: formattedDate,
-        id: uuidv4(),
+        customId: uuidv4(),
       };
       
       mutate(post);

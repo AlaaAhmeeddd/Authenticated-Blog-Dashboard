@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient, updatePost } from "../utils/http";
 import Input from "./Input";
-import { PostType } from "@/type";
+import { PostType, updatedPostType } from "@/type";
 
 interface modalType {
     post: PostType,
@@ -54,14 +54,14 @@ export default function Modal({ post, setShowModal } : modalType) {
         }
         setErrors(newErrors);
         if (!newErrors.headline && !newErrors.description && !newErrors.imageUrl) {
-            mutate({ postId: postInfo.id, updatedData: postInfo });
+            mutate({ postId: postInfo.customId, updatedData: postInfo });
         }
     };
 
     const { mutate, isPending, isError, error } = useMutation<
-        { postId: string | undefined; updatedData: PostType }, 
+        { postId: string | undefined; updatedData: updatedPostType }, 
         unknown,
-        { postId: string | undefined; updatedData: PostType }
+        { postId: string | undefined; updatedData: updatedPostType }
     >({
         mutationFn: async ({ postId, updatedData }) => {
             await updatePost(postId!, updatedData);

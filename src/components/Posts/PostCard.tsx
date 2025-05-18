@@ -11,6 +11,7 @@ interface CardType {
 }
 
 export default function PostCard({ post, isDashboard } : CardType) {
+  console.log(post); 
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const { mutate } = useMutation({
@@ -38,7 +39,7 @@ export default function PostCard({ post, isDashboard } : CardType) {
           <h1 className='text-xl font-semibold mb-1'>{post.headline}</h1>
           {isDashboard && (
             <IoTrashSharp
-              onClick={() => handleDelete(post.id!)}
+              onClick={() => handleDelete(post.customId)} 
               className="text-red-500 hover:text-red-700 duration-300 cursor-pointer text-xl"
             />
           )}

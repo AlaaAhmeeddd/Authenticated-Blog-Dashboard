@@ -3,7 +3,7 @@ export interface PostType {
     description: string;
     imageUrl: string;
     date: string;
-    id?: string;
+    customId: string;
     userEmail: string
 }
 

@@ -21,11 +21,9 @@ export default function PersonInfo() {
     queryFn: getAllUsers
   });
   const [matchedUser, setMatchedUser] = useState<UserType>();
-  console.log(data, 'data')
   useEffect(() => {
     if (user?.email) {
       const foundUser: UserType = data?.find((userData) => userData.email === user.email);
-      console.log(foundUser, 'foundUser')
       setMatchedUser(foundUser);
     } else {
       setMatchedUser(undefined);
