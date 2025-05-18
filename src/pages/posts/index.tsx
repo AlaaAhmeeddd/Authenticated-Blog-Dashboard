@@ -5,6 +5,7 @@ import { IoMdAdd } from "react-icons/io";
 import PostCard from "../../components/Posts/PostCard";
 import usePosts from "./usePosts";
 import { RootState } from "@/store";
+import { PostType } from "@/type";
 
 export default function Posts() {
   const { data, isError, isLoading } = usePosts();
@@ -19,7 +20,6 @@ export default function Posts() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
-
   return (
     <div className="container mx-auto">
       <div className="flex items-center justify-between">

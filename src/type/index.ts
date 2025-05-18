@@ -4,7 +4,8 @@ export interface PostType {
     imageUrl: string;
     date: string;
     customId: string;
-    userEmail: string
+    userEmail: string;
+    id?: string;
 }
 
 export interface UserType {

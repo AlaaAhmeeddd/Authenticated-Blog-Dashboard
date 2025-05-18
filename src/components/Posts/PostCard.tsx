@@ -11,7 +11,6 @@ interface CardType {
 }
 
 export default function PostCard({ post, isDashboard } : CardType) {
-  console.log(post); 
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const { mutate } = useMutation({
