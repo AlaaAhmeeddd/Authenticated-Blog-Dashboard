@@ -11,7 +11,7 @@ export default function MainNavigation() {
     return (
         <div className='rounded-md bg-slate-900 mb-8 text-white container mx-auto py-4 px-8'>
             <div className='flex items-center justify-between flex-1'>
-                <p className='text-3xl font-bold'>Dashboard</p>
+                <h1 className='text-3xl font-bold'>Dashboard</h1>
                 <div className='font-semibold text-sm'>
                     <NavLink to={'/'} className={({ isActive }) => (isActive ? 'text-white bg-slate-700 rounded-2xl px-4 py-2' : 'px-4 py-2')}>
                         Posts
